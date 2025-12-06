@@ -79,7 +79,9 @@ const Notifications = () => {
   };
 
   const handleDeleteAll = () => {
-    setAllNotifications([]);
+    if (window.confirm('Are you sure you want to clear all notifications?')) {
+      setAllNotifications([]);
+    }
   };
 
   const handleMarkAsRead = (id) => {
@@ -97,17 +99,17 @@ const Notifications = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-5 lg:p-6 xl:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 sm:mb-5 md:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3">
             <div>
-              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                <Bell className="h-8 w-8" />
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 sm:gap-3">
+                <Bell className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
                 Notifications
               </h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-xs sm:text-sm md:text-base">
                 {unreadCount > 0 ? `${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}` : 'All caught up!'}
               </p>
             </div>
@@ -117,39 +119,41 @@ const Notifications = () => {
               <button
                 onClick={handleMarkAllRead}
                 disabled={unreadCount === 0}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`flex items-center gap-1 sm:gap-1.5 md:gap-2 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                   unreadCount === 0
                     ? 'text-muted-foreground bg-secondary/50 cursor-not-allowed opacity-50'
-                    : 'text-foreground hover:bg-secondary'
+                    : 'text-foreground hover:bg-secondary bg-card border border-border'
                 }`}
               >
-                <CheckCheck className="h-4 w-4" />
-                Mark all read
+                <CheckCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
+                <span className="hidden xs:inline sm:hidden md:inline">Mark all read</span>
+                <span className="xs:hidden sm:inline md:hidden">Read all</span>
               </button>
               <button
                 onClick={handleDeleteAll}
                 disabled={allNotifications.length === 0}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`flex items-center gap-1 sm:gap-1.5 md:gap-2 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                   allNotifications.length === 0
                     ? 'text-muted-foreground bg-secondary/50 cursor-not-allowed opacity-50'
-                    : 'text-destructive hover:bg-destructive/10'
+                    : 'text-destructive hover:bg-destructive/10 bg-card border border-border'
                 }`}
               >
-                <Trash2 className="h-4 w-4" />
-                Clear all
+                <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4" />
+                <span className="hidden xs:inline sm:hidden md:inline">Clear all</span>
+                <span className="xs:hidden sm:inline md:hidden">Clear</span>
               </button>
             </div>
           </div>
 
           {/* Filters */}
-          <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center gap-2 flex-wrap">
+            <Filter className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
             <div className="flex gap-2">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                   filter === 'all'
-                    ? 'bg-primary text-primary-foreground'
+                    ? 'bg-teal-600 text-white'
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
@@ -157,19 +161,24 @@ const Notifications = () => {
               </button>
               <button
                 onClick={() => setFilter('unread')}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                   filter === 'unread'
-                    ? 'bg-primary text-primary-foreground'
+                    ? 'bg-teal-600 text-white'
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
                 Unread
+                {unreadCount > 0 && (
+                  <span className="ml-1.5 px-1.5 py-0.5 bg-teal-700 text-white text-[10px] sm:text-xs rounded-full">
+                    {unreadCount}
+                  </span>
+                )}
               </button>
               <button
                 onClick={() => setFilter('read')}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                   filter === 'read'
-                    ? 'bg-primary text-primary-foreground'
+                    ? 'bg-teal-600 text-white'
                     : 'bg-secondary text-foreground hover:bg-secondary/80'
                 }`}
               >
@@ -180,72 +189,72 @@ const Notifications = () => {
         </div>
 
         {/* Notifications List */}
-        <div className="space-y-2">
+        <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
           {filteredNotifications.length > 0 ? (
             filteredNotifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`bg-card border border-border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer ${
-                  !notification.isRead ? 'border-l-4 border-l-blue-500' : ''
+                className={`bg-card border border-border rounded-lg p-3 sm:p-3.5 md:p-4 hover:shadow-md transition-all ${
+                  !notification.isRead ? 'border-l-4 border-l-teal-600' : ''
                 }`}
               >
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-2 sm:gap-2.5 md:gap-3 lg:gap-4">
                   {/* Status Indicator */}
-                  <div className="mt-1">
+                  <div className="mt-1 flex-shrink-0">
                     {!notification.isRead && (
-                      <div className="h-3 w-3 bg-blue-500 rounded-full" />
+                      <div className="h-2 w-2 sm:h-2.5 sm:w-2.5 md:h-3 md:w-3 bg-teal-600 rounded-full" />
                     )}
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <h3
-                      className={`text-base font-semibold ${
+                      className={`text-xs sm:text-sm md:text-base font-semibold ${
                         !notification.isRead ? 'text-foreground' : 'text-muted-foreground'
                       }`}
                     >
                       {notification.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-[11px] sm:text-xs md:text-sm text-muted-foreground mt-0.5 sm:mt-1 line-clamp-2">
                       {notification.description}
                     </p>
-                    <div className="flex items-center gap-1 mt-2">
-                      <Clock className="h-3 w-3 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 mt-1 sm:mt-1.5 md:mt-2">
+                      <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-muted-foreground flex-shrink-0" />
+                      <span className="text-[10px] sm:text-xs text-muted-foreground">
                         {notification.time}
                       </span>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-shrink-0">
                     {!notification.isRead && (
                       <button
                         onClick={() => handleMarkAsRead(notification.id)}
-                        className="p-2 hover:bg-secondary rounded-lg transition-colors"
+                        className="p-1 sm:p-1.5 md:p-2 hover:bg-secondary rounded-lg transition-colors"
                         title="Mark as read"
                       >
-                        <CheckCheck className="h-4 w-4 text-muted-foreground" />
+                        <CheckCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-muted-foreground hover:text-teal-600" />
                       </button>
                     )}
                     <button
                       onClick={() => handleDelete(notification.id)}
-                      className="p-2 hover:bg-destructive/10 rounded-lg transition-colors"
+                      className="p-1 sm:p-1.5 md:p-2 hover:bg-destructive/10 rounded-lg transition-colors"
                       title="Delete"
                     >
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-destructive" />
                     </button>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="bg-card border border-border rounded-lg p-12 text-center">
-              <Bell className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">
+            <div className="bg-card border border-border rounded-lg p-6 sm:p-8 md:p-10 lg:p-12 text-center">
+              <Bell className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 mx-auto mb-2 sm:mb-3 md:mb-4 text-muted-foreground opacity-50" />
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-foreground mb-1 sm:mb-1.5 md:mb-2">
                 No notifications
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {filter === 'unread' && 'You have no unread notifications'}
                 {filter === 'read' && 'You have no read notifications'}
                 {filter === 'all' && 'You have no notifications'}
